@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+    <script src="js/eindex.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link rel="stylesheet" href="css/eindex.css">
+</head>
+<body>
+<h1>请选择身份：</h1>
+<div id="app">
+    <el-row>
+        <el-button type="primary" @click="buyers()">我是顾客</el-button>
+        <el-button type="warning" @click="riders()">我是骑手</el-button>
+        <el-button type="success" @click="sellers()">我是商家</el-button>
+    </el-row>
+</div>
+<script>
+    new Vue({
+        el:"#app",
+        methods:{
+            buyers(){
+                window.location.href="../src/buyer/login.html"
+            },riders(){
+
+            },sellers(){
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

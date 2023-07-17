@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../js/vue.js"></script>
+    <script src="../../js/eindex.js"></script>
+    <script src="../../js/axios.min.js"></script>
+    <link rel="stylesheet" href="../../css/eindex.css">
+</head>
+
+<body>
+<style>
+    #app{
+        margin: 100px auto 0;
+        width:400px;
+        height: 300px;
+    }
+    .tol{
+        text-align: center;
+        width: 100%;
+        height: 10px;
+        margin-top: 100px;
+    }
+</style>
+<div class="tol"><h1>注册</h1></div>
+<div id="app">
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="注册账号" prop="id">
+            <el-input  v-model="ruleForm.id"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+            <el-input  v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="regist()">注册</el-button>
+            <el-button @click="login()">登录</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            var checkName = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('姓名不能为空'));
+                }
+                setTimeout(() => {
+                    if (value.length<1) {
+                        callback(new Error('姓名过短'));
+                    } else {
+                        if (value > 10) {
+                            callback(new Error('姓名过长'));
+                        } else {
+                            callback();
+                        }
+                    }
+                }, 1000);
+            };
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.ruleForm.checkPass !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm.pass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            var checkId = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入账号'));
+                }
+                    callback();
+            }
+            return {
+                ruleForm: {
+                    pass: '',
+                    checkPass: '',
+                    name: '',
+                    id:''
+                },
+                rules: {
+                    pass: [
+                        {validator: validatePass, trigger: 'blur'}
+                    ],
+                    checkPass: [
+                        {validator: validatePass2, trigger: 'blur'}
+                    ],
+                    name: [
+                        {validator: checkName, trigger: 'blur'}
+                    ],
+                    id: [
+                        {validator: checkId, trigger: 'blur'}
+                    ]
+                }
+            }
+        },methods:{
+            login(){
+                window.location.href = "login.html";
+            },
+            regist(){
+                var that = this;
+                axios.post("../../buyer/regist", {
+                    "id":this.ruleForm.id,
+                    "name":this.ruleForm.name,
+                    "password": this.ruleForm.pass
+                }).then(function (res) {
+                    if (res.data.code == 200) {
+                        window.location.href = "index.html";
+                    } else {
+                        that.$message({
+                            message: '注册失败',
+                            type: 'warning'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            }
+        }
+    })
+</script>
+</html>
