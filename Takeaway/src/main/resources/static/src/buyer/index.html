@@ -10,6 +10,10 @@
 </head>
 <body>
 <style>
+    img{
+        width: 250px;
+        height: 200px;
+    }
     * {
         margin: 0;
         padding: 0;
@@ -113,97 +117,92 @@
         <el-col :span="21">
             <div><el-input v-model="input" placeholder="请输入内容"></el-input></div>
             <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(1)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mfList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">
                     <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(2)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mtList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(2)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(3)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in hgList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(3)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(4)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in kcList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(4)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(5)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in xcList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(5)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(6)" >
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in bdList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(6)" >
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(7)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in cyList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(7)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
                         </div>
                     </div>
                 </el-card>
             </div>
-            <div style="height: 300px" v-show="changeMode(8)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in xgList" :key="index">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                    <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(8)" >
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
+                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{item.xxx}}</time>
+                            <time class="time">{{item.price}}</time>
+
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
+
                         </div>
                     </div>
                 </el-card>
@@ -219,31 +218,32 @@
             return {
                 input: '',
                 current: '1',
-                mfList:[{
-                    "xxx":"xx",
-                    "xxxx":"xxxx"
-                }],
-                mtList:[{
-                    "mt":"mt",
-                    "mtt":"mtt"
-                }],
-                hgList:[{
-                    "hg":"hg",
-                    "hgg":"hgg"
-                }],
-                kcList:[{
-
-                }],
-                xcList:[{
-
-                }],
-                bdList:[{
-
-                }],
-                cyList:[{}],
-                xgList:[{}]
-            }
-        }, methods: {
+                mList:[{
+                    "name":"",
+                    "price":"",
+                    "picture":"",
+                    "money":""
+                }]
+            }},created(){
+                this.refresh(1)
+            }, methods: {
+            refresh(kind){
+                var that = this;
+                axios.get("../../meal/kindmeal?kind="+kind, {}).then(function (res) {
+                    console.log("kind"+kind)
+                    if (res.data.code == 200) {
+                        console.log(res.data.all)
+                        that.mList=res.data.all
+                    } else {
+                        that.$message({
+                            message: '读取失败',
+                            type: 'warning'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            },
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
@@ -258,7 +258,7 @@
                 }
             },changeCurrent(index){
                 this.current = index;
-                console.log(this.current)
+                this.refresh(index)
             },open(id){
                 window.location.href = "./goods.html?id=" + id;
             }

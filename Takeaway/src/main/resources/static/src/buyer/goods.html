@@ -28,6 +28,7 @@
         justify-content: center;
         align-items: center;
     }
+
     .el-carousel__item h3 {
         color: #475669;
         font-size: 18px;
@@ -43,27 +44,312 @@
     .el-carousel__item:nth-child(2n+1) {
         background-color: #d3dce6;
     }
-    .photo{
+
+    .photo {
         width: 500px;
         height: 400px;
-        background-color: #8cc5ff;
-        margin: 100px;
-        display:inline-block;
+        position: absolute;
+        top: 150px;
+        left: 150px;
+
     }
-    .text{
+
+    img {
         width: 500px;
+        height: 400px;
+    }
+
+    .text {
+        display: inline-block;
+        width: 600px;
+        height: 400px;
+        position: absolute;
+        left: 750px;
+        top: 150px;
+        z-index: 1000;
+        background-color: #eaeaea;
+    }
+
+    .shop-name {
+        position: absolute;
+        font-size: 40px;
+        left: 50px;
+        top: 20px;
+    }
+
+    .shop-price {
+        position: absolute;
+        top: 80px;
+        left: 50px;
+        font-size: 30px;
+        color: #930000;
+    }
+
+    .rank {
+        position: absolute;
+        font-size: 15px;
+        left: 500px;
+        top: 40px;
+        color: #8f8e8e;
+    }
+
+    .shop-intr {
+        position: absolute;
+        top: 140px;
+        left: 50px;
+        font-size: 20px;
+        color: #8e959f
+    }
+
+    .shop-support {
+        position: absolute;
+        top: 80px;
+        left: 500px;
+        font-size: 20px;
+        color: #8e959f
+    }
+
+    .order {
+        width: 200px;
+        height: 80px;
+        font-size: 30px;
+        position: absolute;
+        top: 300px;
+        left: 70px;
+    }
+
+    .cart {
+        width: 200px;
+        height: 80px;
+        font-size: 30px;
+        position: absolute;
+        top: 300px;
+        left: 350px;
+    }
+
+    .end {
+        width: 100%;
+        height: 70px;
+        background-color: #9bc8ff;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+    }
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 480px;
     }
 </style>
 <div class="top">欢迎订餐，用餐愉快</div>
-<div class="photo">
-<template>
-    <el-carousel :interval="5000" arrow="always">
-        <el-carousel-item v-for="item in 4" :key="item">
-            <h3>{{ item }}</h3>
-        </el-carousel-item>
-    </el-carousel>
-</template>
+<div id="app">
+    <div class="photo">
+        <img :src="picture"/>
+    </div>
+    <div class="text">
+        <span class="shop-name">{{name}}</span>
+        <span class="rank">未上榜新品</span><br>
+        <span class="shop-price">{{price}}</span>
+        <span class="shop-intr">{{message}}</span><br>
+        <span class="shop-support">{{support}}</span><br>
+            <el-button type="primary" @click="place()" class="order">我要下单</el-button>
+
+        <el-button type="warning" @click="cart()" class="cart">加入购物车</el-button>
+    </div>
+    <div class="message">
+        <el-dialog
+                title="下单"
+                :visible.sync="dialogVisible2"
+                width="50%"
+                :before-close="handleClose">
+            <el-form :model="ruleForm"  ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="订单号" prop="name">
+                    <el-input v-model="ruleForm.id"></el-input>
+                </el-form-item>
+                <el-form-item label="菜品名" prop="name">
+                    <el-input v-model="ruleForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="请选择分量" prop="name">
+                    <el-input v-model="ruleForm.num"></el-input>
+                </el-form-item>
+                <el-form-item label="请输入电话" prop="name">
+                    <el-input v-model="ruleForm.tel"></el-input>
+                </el-form-item>
+                <el-form-item label="请选择地址" prop="name">
+                    <el-input v-model="ruleForm.address"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="desc">
+                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                </el-form-item>
+            </el-form>
+                 <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="submitForm()">确 定</el-button>
+                 </span>
+        </el-dialog>
+    </div>
+    <el-dialog
+            title="模拟支付"
+            :visible.sync="dialogVisible"
+            width="50%"
+            :before-close="handleClose">
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>确认支付</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="modelpay()">模拟支付</el-button>
+            </div>
+            <div class="paymsg">
+                <span>{{msg.name}}，</span>
+                <span>{{msg.num}}份，</span>
+                <span>共{{msg.price}}￥,</span>
+                <span>备注：{{msg.desc}}，</span>
+                <span>电话号码：{{msg.tel}}，</span>
+                <span>配送地址：{{msg.address}}</span>
+            </div>
+        </el-card>
+    </el-dialog>
 </div>
-<div class="text"></div>
+<div class="end"></div>
+<script>
+    var a = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                id: '',
+                picture: '',
+                name: '猪脚饭',
+                price: '10',
+                message: '一份香喷喷的猪脚饭 ',
+                support: '支持',
+                sellerid:'',
+                dialogVisible: false,
+                dialogVisible2: false,
+                ruleForm: {
+                    id: '',
+                    name: '',
+                    num: '',
+                    tel: '',
+                    address: '',
+                    desc: ''
+                },msg:{
+                    name:'',
+                    num:'',
+                    desc:'',
+                    tel:'',
+                    address:'',
+                    price:''
+                }
+            }
+        },
+        created() {
+            this.refresh(this.GetRequest())
+        }, methods: {
+            refresh(id) {
+                var that = this;
+                axios.get("../../meal/onemeal?id=" + this.GetRequest()["id"]).then(function (res) {
+                    if (res.data.code == 200) {
+                        that.picture = res.data.all.picture;
+                        that.name = res.data.all.name;
+                        that.price = res.data.all.price + "￥"
+                        that.message = res.data.all.message
+                        that.support = res.data.all.support
+                        that.sellerid = res.data.all.sellerid
+                    } else {
+                        that.$message({
+                            message: '读取失败',
+                            type: 'warning'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            }, handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
+            }, order() {
+                this.$alert('这是一段内容', '标题名称', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `action: ${action}`
+                        });
+                    }
+                });
+            }, cart() {
+
+            }, GetRequest() {
+                const url = location.search;
+                let theRequest = new Object();
+                if (url.indexOf("?") != -1) {
+                    let str = url.substr(1)
+                    strs = str.split("&")
+                    for (let i = 0; i < strs.length; i++) {
+                        theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1])
+                    }
+                }
+                return theRequest;
+            },place(){
+                var that = this;
+                this.dialogVisible2 = true
+                that.ruleForm.id =Math.floor(Math.random() * 100) + 637834 + Math.floor(Math.random() * 200)
+                that.ruleForm.name = this.name
+            }, submitForm() {
+                this.dialogVisible2 = false
+                this.dialogVisible = true
+                this.msg.name=this.name
+                this.msg.num=this.ruleForm.num
+                this.msg.tel=this.ruleForm.tel
+                this.msg.desc=this.ruleForm.desc
+                this.msg.address=this.ruleForm.address
+                this.msg.price=parseFloat(this.price)*parseFloat(this.ruleForm.num)
+            },modelpay(){
+                var that = this;
+                axios.get("../../order/neworder", {
+                    params: {
+                        "num": this.ruleForm.num,
+                        "tel": this.ruleForm.tel,
+                        "address": this.ruleForm.address,
+                        "desc": this.ruleForm.desc,
+                        "id": this.ruleForm.id,
+                        "name": this.ruleForm.name,
+                        "bid": this.sellerid
+                    }
+                }).then(function (res) {
+                    if (res.data.code == 200) {
+                        window.location.href = ""
+                    } else {
+                        that.$message({
+                            message: '读取失败',
+                            type: 'warning'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            }
+        }
+    })
+
+</script>
 </body>
 </html>
