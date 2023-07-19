@@ -135,6 +135,7 @@
         left: 0;
         bottom: 0;
     }
+
     .text {
         font-size: 14px;
     }
@@ -148,6 +149,7 @@
         display: table;
         content: "";
     }
+
     .clearfix:after {
         clear: both
     }
@@ -167,9 +169,9 @@
         <span class="shop-price">{{price}}</span>
         <span class="shop-intr">{{message}}</span><br>
         <span class="shop-support">{{support}}</span><br>
-            <el-button type="primary" @click="place()" class="order">我要下单</el-button>
+        <el-button type="primary" @click="place()" class="order">我要下单</el-button>
 
-        <el-button type="warning" @click="cart()" class="cart">加入购物车</el-button>
+        <el-button type="warning" @click="addGwc()" class="cart">加入购物车</el-button>
     </div>
     <div class="message">
         <el-dialog
@@ -177,7 +179,7 @@
                 :visible.sync="dialogVisible2"
                 width="50%"
                 :before-close="handleClose">
-            <el-form :model="ruleForm"  ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="订单号" prop="name">
                     <el-input v-model="ruleForm.id"></el-input>
                 </el-form-item>
@@ -197,7 +199,7 @@
                     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
                 </el-form-item>
             </el-form>
-                 <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible2 = false">取 消</el-button>
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                  </span>
@@ -236,7 +238,7 @@
                 price: '10',
                 message: '一份香喷喷的猪脚饭 ',
                 support: '支持',
-                sellerid:'',
+                sellerid: '',
                 dialogVisible: false,
                 dialogVisible2: false,
                 ruleForm: {
@@ -246,13 +248,13 @@
                     tel: '',
                     address: '',
                     desc: ''
-                },msg:{
-                    name:'',
-                    num:'',
-                    desc:'',
-                    tel:'',
-                    address:'',
-                    price:''
+                }, msg: {
+                    name: '',
+                    num: '',
+                    desc: '',
+                    tel: '',
+                    address: '',
+                    price: ''
                 }
             }
         },
@@ -308,21 +310,21 @@
                     }
                 }
                 return theRequest;
-            },place(){
+            }, place() {
                 var that = this;
                 this.dialogVisible2 = true
-                that.ruleForm.id =Math.floor(Math.random() * 100) + 637834 + Math.floor(Math.random() * 200)
+                that.ruleForm.id = Math.floor(Math.random() * 100) + 637834 + Math.floor(Math.random() * 200)
                 that.ruleForm.name = this.name
             }, submitForm() {
                 this.dialogVisible2 = false
                 this.dialogVisible = true
-                this.msg.name=this.name
-                this.msg.num=this.ruleForm.num
-                this.msg.tel=this.ruleForm.tel
-                this.msg.desc=this.ruleForm.desc
-                this.msg.address=this.ruleForm.address
-                this.msg.price=parseFloat(this.price)*parseFloat(this.ruleForm.num)
-            },modelpay(){
+                this.msg.name = this.name
+                this.msg.num = this.ruleForm.num
+                this.msg.tel = this.ruleForm.tel
+                this.msg.desc = this.ruleForm.desc
+                this.msg.address = this.ruleForm.address
+                this.msg.price = parseFloat(this.price) * parseFloat(this.ruleForm.num)
+            }, modelpay() {
                 var that = this;
                 axios.get("../../order/neworder", {
                     params: {
@@ -346,6 +348,12 @@
                 }).catch(function (err) {
                     console.log(err);
                 })
+            }, addGwc() {
+                if (window.sessionStorage.getItem("gwc") == null) {
+                    window.sessionStorage.setItem("gwc", "");
+                }
+                window.sessionStorage.setItem("gwc", window.sessionStorage.getItem("gwc") + "," + this.GetRequest()["id"])
+                window.location.href = "http://localhost:8080/src/buyer/index.html"
             }
         }
     })

@@ -70,6 +70,24 @@
     .clearfix:after {
         clear: both
     }
+    .gwc{
+        position: fixed;
+        top: 100px;
+        right: 0;
+    }
+    .gw{
+        position: fixed;
+        top: 140px;
+        right: 0;
+        width: 200px;
+        height: 320px;
+        background-color: #5daf34;
+    }
+    .gw .a1{
+        width: 100%;
+        height: 260px;
+        overflow: auto;
+    }
 </style>
 <div class="top">欢迎订餐，用餐愉快</div>
 <div id="app" style="position: relative">
@@ -228,15 +246,28 @@
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
-
                             <el-button type="text" class="button" @click="open(item.id)">进入了解</el-button>
-
                         </div>
                     </div>
                 </el-card>
             </div>
         </el-col>
     </el-row>
+    <el-button class="gwc" type="primary" @click="gwcShow()">
+        {{showG?"关  闭":"购物车"}}
+    </el-button>
+    <div class="gw" v-show="showG">
+        <div class="a1">
+            <p v-for="one in gwcList">
+                {{one}}
+            </p>
+        </div>
+        <div>
+            总价格：{{sum}}<br/>
+            <el-button size="small" @click="cleargwc()">清空</el-button>
+            <el-button size="small" @click="settlement()">结算</el-button>
+        </div>
+    </div>
 
 </div>
 <script>
@@ -252,10 +283,25 @@
                     "picture": "",
                     "money": ""
                 }],
-                now: 1
+                now: 1,
+                showG: false,
+                gwcList:[],
+                sum:0
             }
         }, created() {
             this.refresh(1)
+            var item = window.sessionStorage.getItem("gwc");
+            var strings = item.split(",");
+            var that = this
+            if(!(strings.length<=1)) {
+                for (var i = 1; i < strings.length; i++) {
+                    axios.get("../../meal/onemeal?id="+strings[i]).then(res=>{
+                        console.log(res.data.all)
+                        that.gwcList.push(res.data.all.message +",价格："+ res.data.all.price)
+                        this.sum+=parseFloat(res.data.all.price)
+                    })
+                }
+            }
         }, methods: {
             refresh(kind) {
                 var that = this;
@@ -308,6 +354,18 @@
                 }).catch(function (err) {
                     console.log(err);
                 })
+            },gwcShow(){
+                this.showG = !this.showG;
+            },cleargwc(){
+                window.sessionStorage.setItem("gwc","")
+                this.gwcList = []
+                this.sum = 0
+            },settlement(){
+                this.cleargwc();
+                this.$message({
+                    message: '结算成功',
+                    type: 'success'
+                });
             }
         }
     })
