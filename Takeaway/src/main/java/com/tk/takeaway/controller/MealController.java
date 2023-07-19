@@ -62,4 +62,25 @@ public class MealController {
         }
         return obj;
     }
+
+    @ApiOperation("根据名称查饭菜列表")
+    @GetMapping("/namemeal")
+    public JSON selectOneKindMealAndName(@RequestParam String kind,@RequestParam String name){
+        JSONObject obj = JSONUtil.createObj();
+        if(StpUtil.isLogin()){
+            List<Meal> mealList = mealService.getMealByName(kind,name);
+            if(mealList.size() == 0){
+                obj.set("code","201");
+                obj.set("msg","查询失败");
+            }else{
+                obj.set("code","200");
+                obj.set("all",mealList);
+                obj.set("msg","查询成功");
+            }
+        }else{
+            obj.set("code","500");
+            obj.set("msg","未登录");
+        }
+        return obj;
+    }
 }

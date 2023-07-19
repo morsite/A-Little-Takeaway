@@ -7,4 +7,6 @@ boolean login(Integer id,String pwd);
 int insert(Buyer buyer);
 boolean delete(Buyer buyer);
 boolean update(Buyer buyer);
+
+
 }

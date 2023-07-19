@@ -1,5 +1,6 @@
 package com.tk.takeaway.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tk.takeaway.mapper.MealMapper;
 import com.tk.takeaway.pojo.Meal;
@@ -30,5 +31,24 @@ public class MealServiceImpl extends ServiceImpl<MealMapper, Meal> implements Me
     @Override
     public Meal getMealById(Integer id) {
         return baseMapper.selectById(id);
+    }
+
+    @Override
+    public List<Meal> getMealByName(String kind, String name) {
+        String kinds="";
+        switch (kind) {
+            case "1":kinds = "mf";break;
+            case "2":kinds = "mt";break;
+            case "3":kinds = "hg";break;
+            case "4":kinds = "kc";break;
+            case "5":kinds = "xc";break;
+            case "6":kinds = "bd";break;
+            case "7":kinds = "cy";break;
+            case "8":kinds = "xg";break;
+        }
+        QueryWrapper<Meal> mealQueryWrapper = new QueryWrapper<>();
+        mealQueryWrapper.eq("kind",kinds);
+        mealQueryWrapper.like("name",name);
+        return baseMapper.selectList(mealQueryWrapper);
     }
 }

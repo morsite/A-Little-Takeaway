@@ -10,10 +10,11 @@
 </head>
 <body>
 <style>
-    img{
+    img {
         width: 250px;
         height: 200px;
     }
+
     * {
         margin: 0;
         padding: 0;
@@ -115,10 +116,16 @@
             </el-menu>
         </el-col>
         <el-col :span="21">
-            <div><el-input v-model="input" placeholder="请输入内容"></el-input></div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(1)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">
+            <div style="position:relative;">
+                <el-input v-model="input" placeholder="请输入内容"
+                          style="position: absolute;left: 0;top: 0;"></el-input>
+                <el-button style="position: absolute;left: 100px;top: 0;" @click="getByName()">查询</el-button>
+            </div>
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(1)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
                     <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
@@ -128,9 +135,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(2)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(2)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -139,9 +149,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(3)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(3)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -150,9 +163,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(4)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(4)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -161,9 +177,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(5)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index">
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(5)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -172,9 +191,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(6)" >
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index">
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(6)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -183,9 +205,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(7)">
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(7)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -194,9 +219,12 @@
                     </div>
                 </el-card>
             </div>
-            <div style="height: 330px;display: flex;flex-direction: row;flex-wrap:wrap;" v-show="changeMode(8)" >
-                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }" v-for="(item,index) in mList" :key="index" >
-                    <img :src="item.picture"  class="image">                    <div style="padding: 14px;">
+            <div style="height: 330px;margin-top:40px;display: flex;flex-direction: row;flex-wrap:wrap;"
+                 v-show="changeMode(8)">
+                <el-card style="width: 250px; margin:5px 5px;" :body-style="{ padding: '0px', width:'250px' }"
+                         v-for="(item,index) in mList" :key="index">
+                    <img :src="item.picture" class="image">
+                    <div style="padding: 14px;">
                         <span>{{item.name}}</span>
                         <div class="bottom clearfix">
                             <time class="time">{{item.price}}</time>
@@ -218,22 +246,24 @@
             return {
                 input: '',
                 current: '1',
-                mList:[{
-                    "name":"",
-                    "price":"",
-                    "picture":"",
-                    "money":""
-                }]
-            }},created(){
-                this.refresh(1)
-            }, methods: {
-            refresh(kind){
+                mList: [{
+                    "name": "",
+                    "price": "",
+                    "picture": "",
+                    "money": ""
+                }],
+                now: 1
+            }
+        }, created() {
+            this.refresh(1)
+        }, methods: {
+            refresh(kind) {
                 var that = this;
-                axios.get("../../meal/kindmeal?kind="+kind, {}).then(function (res) {
-                    console.log("kind"+kind)
+                axios.get("../../meal/kindmeal?kind=" + kind, {}).then(function (res) {
+                    console.log("kind" + kind)
                     if (res.data.code == 200) {
                         console.log(res.data.all)
-                        that.mList=res.data.all
+                        that.mList = res.data.all
                     } else {
                         that.$message({
                             message: '读取失败',
@@ -250,17 +280,34 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            changeMode(index){
-                if(index==this.current){
+            changeMode(index) {
+                if (index == this.current) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
-            },changeCurrent(index){
+            }, changeCurrent(index) {
                 this.current = index;
                 this.refresh(index)
-            },open(id){
+                this.now = index;
+            }, open(id) {
                 window.location.href = "./goods.html?id=" + id;
+            },getByName(){
+                console.log("aa")
+                var that = this;
+                axios.get("../../meal/namemeal?kind=" + this.now+"&name="+this.input).then(function (res) {
+                    if (res.data.code == 200) {
+                        console.log(res.data.all)
+                        that.mList = res.data.all
+                    } else {
+                        that.$message({
+                            message: '读取失败',
+                            type: 'warning'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
             }
         }
     })
