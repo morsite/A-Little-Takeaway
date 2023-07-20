@@ -8,4 +8,10 @@ public interface MealService {
     List<Meal> getMealList(String kind);
     Meal getMealById(Integer id);
     List<Meal> getMealByName(String kind,String name);
+
+    List<Meal> selectAllMealByMy();
+
+    boolean addMeal(Meal meal);
+
+    boolean deleteById(Integer id);
 }

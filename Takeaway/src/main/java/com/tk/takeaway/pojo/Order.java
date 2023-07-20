@@ -7,15 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("`order`")
 public class Order {
     Integer id;
-    @TableField("message")
     String message;
     @TableField("buyerTelephone")
     String buyerTelephone;
@@ -25,11 +22,12 @@ public class Order {
     String buyerAddress;
     @TableField("sellerAddress")
     String sellerAddress;
-    @TableField("state")
     String state;
     @TableField("orderTime")
     Timestamp orderTime;
-public Order(Integer id, String message, Buyer buyer,Seller seller,String state,Timestamp orderTime){
+    String  notes;
+    Integer mealid;
+public Order(Integer id, String message, Buyer buyer,Seller seller,String state,Timestamp orderTime ,String notes,Integer mealid){
     this.id = id;
     this.message = message;
     this.buyerTelephone = buyer.getTelephone();
@@ -38,15 +36,18 @@ public Order(Integer id, String message, Buyer buyer,Seller seller,String state,
     this.sellerAddress = seller.getAddress();
     this.state = state;
     this.orderTime = orderTime;
+    this.notes=notes;
+    this.mealid=mealid;
 }
-public Order(Integer id, String message, String buyerTelephone, String buyerAddress, Seller seller, String state, long orderTime){
-    this.id = id;
-    this.message = message;
-    this.buyerTelephone = buyerTelephone;
-    this.sellerTelephone = seller.getTelephone();
-    this.buyerAddress = buyerAddress;
-    this.sellerAddress = seller.getAddress();
-    this.state = state;
-    this.orderTime = new Timestamp(orderTime);
-}
+
+    public Order(Integer id, String desc, String tel, String address, Seller seller, String number, long ordertime) {
+        this.id = id;
+        this.message = desc;
+        this.buyerTelephone = tel;
+        this.sellerTelephone = seller.getTelephone();
+        this.buyerAddress = address;
+        this.sellerAddress = seller.getAddress();
+        this.state = number;
+        this.orderTime = new Timestamp(ordertime);
+    }
 }
