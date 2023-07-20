@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          charset="utf-8"/>
+    <title></title>
+    <script src="../../js/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+
+    <!--  引入vue.js文件  -->
+    <script src="../../js/vue.js"></script>
+    <!-- 引入 axios.js文件-->
+    <script src="../../js/axios.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <button  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">增加商品</button>
+    <table  class="table" >
+        <tr>
+            <td>种类</td>
+            <td>图片</td>
+            <td>菜名</td>
+            <td>价格</td>
+            <td>是否支持外卖</td>
+            <td>描述信息</td>
+            <td>操作</td>
+        </tr>
+        <tr v-for="meal in mealList">
+            <td>{{meal.kind}}</td>
+            <td>{{meal.picture}}</td>
+            <td>{{meal.name}}</td>
+            <td>{{meal.price}}</td>
+            <td>{{meal.support}}</td>
+            <td>{{meal.message}}</td>
+            <td><button @click="deleteById(meal.id)">删除</button></td>
+        </tr>
+    </table>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户信息录入</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" >
+                        <div class="form-group">
+                            <label for="inputEno" class="col-sm-2 control-label">编号</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputEno" v-model="addEno" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputKind" class="col-sm-2 control-label">种类</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputKind" v-model="addKind" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-2 control-label">菜名</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputName" v-model="addName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPrice" class="col-sm-2 control-label">价格</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputPrice" v-model="addPrice">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputSupport" class="col-sm-2 control-label">是否支持外卖</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputSupport" v-model="addSupport">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMessage" class="col-sm-2 control-label">信息描述</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputMessage" v-model="addMessage">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMoney" class="col-sm-2 control-label">佣金</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputMoney" v-model="addMoney">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addBtn" @click="addMeal">增加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    let vm=new Vue({
+        el:".container",
+        data:{
+            mealList:[],
+            addEno:"",
+            addKind:"",
+            addName:"",
+            addPrice:"",
+            addSupport:"",
+            addMessage:"",
+            addMoney:"",
+        },
+        created(){
+            this.selectByMy();
+
+
+        },
+        methods:{
+            selectByMy(){
+                let that=this;
+                axios.get("../../meal/selectAllMealByMy").then(function (response) {
+                    console.log("response",response);
+                    that.mealList=response.data.data;
+                    console.log("this",that.mealList);
+
+                    that.pageNum = Math.ceil(that.mealList.length / that.pageSize) || 1;//计算有多少页数据，默认为1
+
+
+                    // 循环页面
+                    for (let i = 0; i < that.pageNum; i++) {
+                        // 每一页都是一个数组 形如 [['第一页的数据'],['第二页的数据'],['第三页数据']]
+                        // 根据每页显示数量 将后台的数据分割到 每一页,假设pageSize为2， 则第一页是1-2条，即slice(0,2)，第二页是3-4条，即slice(3,4)以此类推
+                        that.totalPage[i] = that.mealList.slice(that.pageSize * i, that.pageSize * (i + 1))
+                        console.log(that.pageNum)
+                    }
+
+                    // 获取到数据后默认显示第一页内容
+                    that.dataShow = that.totalPage[that.currentPage];
+                }).catch(function (error) {
+                    console.log("error",error);
+                })
+            },
+
+            addMeal(){
+                let that =this;
+                const meal={"sellerid":this.addEno,"kind":this.addKind,"name":this.addName,"price":this.addPrice,"support":this.addSupport,"message":this.addMessage,"money":this.addMoney};
+                axios.post("../../meal/addMeal",JSON.stringify(meal),{headers:{
+                        "Content-Type":"application/json"
+                    }}).then(function(response){
+                    // console.log("响应的数据",response.data);
+                    alert(response.data.msg);
+                    //调用查询
+                    that.selectByMy();
+                    //增加模态框隐藏
+                    $("#addModal").modal("hide");
+                    //    清空模态框输入的值
+                    that.addEno="";
+                    that.addKind = "";
+                    that.addName = "";
+                    that.addPrice = "";
+                    that.addSupport="";
+                    that.addMessage="";
+                    that.addMoney="";
+                }).catch(function(error){
+                    console.log("error",error);
+                })
+            },
+            deleteById(id){
+                alert("id" + id);
+                let that = this;
+                if (confirm("确定要删除吗")) {
+                    axios.delete("/meal/deleteById/" + id).then(function(response){
+                        console.log("响应的数据",response.data);
+                        alert(response.data.msg);
+                        //    调用查询所有的方法
+                        that.selectByMy();
+                    }).catch(function(error){
+                        console.log("error",error);
+                    })
+                }
+            }
+        }
+    })
+</script>
+</html>

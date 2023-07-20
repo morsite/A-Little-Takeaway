@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          charset="utf-8"/>
+    <title>Title</title>
+    <script src="../../js/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"  />
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            商家管理
+            <a href="meal.html" target="ifd">菜品</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+<!--                <li role="presentation" class="active"><a href="table.html" target="ifd">电影库</a> </li>-->
+                <li role="presentation"><a href="takeaway.html" target="ifd">本店订单</a> </li>
+                <li role="presentation"><a href="commodity.html" target="ifd">商品管理</a> </li>
+                <li role="presentation"><a href="contact.html" target="ifd">本店联系方式</a> </li>
+            </ul>
+
+        </div>
+        <div class="col-md-10">
+            <!--iframe 高度自适应 onload="this.height=ifd.document.body.scrollHeight"-->
+            <iframe src="sellermain.html" frameborder="0" name="ifd" width="100%"
+                    scrolling="no" height="1000"></iframe>
+        </div>
+    </div>
+</div>
+</body>
+</html>

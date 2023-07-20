@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          charset="utf-8"/>
+    <title></title>
+    <script src="../../js/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+
+    <!--  引入vue.js文件  -->
+    <script src="../../js/vue.js"></script>
+    <!-- 引入 axios.js文件-->
+    <script src="../../js/axios.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <td>用户电话</td>
+            <td>地址</td>
+            <td>下单时间</td>
+            <td>备注信息</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+        <tr v-for="ord in ordList">
+            <td>{{ord.buyerTelephone}}</td>
+            <td>{{ord.buyerAddress}}</td>
+            <td>{{ord.orderTime}}</td>
+            <td>{{ord.message}}</td>
+            <td>{{ord.state}}</td>
+            <td><a  data-toggle="modal" data-target="#addModal">更改</a></td>
+        </tr>
+    </table>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">状态变化</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" >
+                        <div class="form-group">
+                            <label for="inputState" class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputState" v-model="addState" >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addBtn" @click="addOrd(ord.state)">更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let vm=new Vue({
+        el:".container",
+        data:{
+            ordList:[],
+            addState:""
+        },
+        created(){
+            this.selectByMy();
+        },
+        methods:{
+            selectByMy(){
+                let that=this;
+                axios.get("../../order/selectAllOrdByMy").then(function (response) {
+                    console.log("response",response);
+                    that.ordList=response.data.data;
+                    console.log("this",this);
+                }).catch(function (error) {
+                    console.log("error",error);
+                })
+            }
+        }
+    })
+</script>
+</html>

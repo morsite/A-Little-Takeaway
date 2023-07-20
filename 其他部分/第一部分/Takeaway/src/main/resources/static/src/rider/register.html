@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          charset="utf-8"/>
+    <title>骑手注册页面</title>
+    <script src="../../js/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+</head>
+<body>
+<form id="ff">
+
+<div class="form-group  ">
+<!--    ID-->
+    <label class="control-label" for="inputID">请输入ID（作为您的登录账号）</label>
+    <div class="input-group">
+        <span class="input-group-addon">数字组合</span>
+        <input type="text" class="form-control" id="inputID" aria-describedby="inputGroupSuccess1Status" >
+    </div>
+    <div>
+        <span id="idError">
+            请正确输入
+        </span><br />
+    </div>
+<!--昵称-->
+    <label class="control-label" for="inputRname">请输入您的昵称（作为您的骑手名称）</label>
+    <div class="input-group">
+        <span class="input-group-addon">昵称</span>
+        <input type="text" class="form-control" id="inputRname" aria-describedby="inputGroupSuccess1Status" >
+    </div>
+<!--电话-->
+    <label class="control-label" for="inputTel">请输入您的电话</label>
+    <div class="input-group">
+        <span class="input-group-addon">电话号码</span>
+        <input type="text" class="form-control" id="inputTel" aria-describedby="inputGroupSuccess1Status" >
+    </div>
+    <div>
+        <span id=telError">
+				请输入电话号码
+        </span><br/>
+    </div>
+<!--    密码-->
+    <label class="control-label" for="inputPwd">请输入您的密码（字母开头，长度在6~18之间，只能包含字母、数字和下划线）</label>
+    <div class="input-group">
+        <span class="input-group-addon">密码</span>
+        <input type="password" class="form-control" id="inputPwd" aria-describedby="inputGroupSuccess1Status">
+    </div>
+    <div>
+        <span id=pwdError">
+				请输入密码
+        </span><br />
+    </div>
+
+<!--    注册按钮-->
+    <div class="form-group">
+        <div class="">
+            <button type="button" class="btn btn-primary" id="registerBtn">注册</button>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+
+
+<script type="text/javascript">
+    let flag1 =false;
+    let flag2 =false;
+    let flag3 =false;
+    $("#inputID").blur(function () {
+        let id =$("#inputID").val();
+        let idReg=/^\d{1,}$/;
+        if(!idReg.test(id)){
+            $("#idError").text("请确保输入的是纯数字组合");
+            $("#idError").css("color","red");
+        }else {
+            $("#idError").text("√");
+            $("#idError").css("color","green");
+            flag1=true;
+        }
+    })
+
+    $("#inputTel").blur(function () {
+        let tel =$("#inputTel").val();
+        let telReg=/^\d{1,}$/;
+        if(!telReg.test(tel)){
+            $("#telError").text("请输入正确的电话号码");
+            $("#telError").css("color","red");
+        }else {
+            $("#telError").text("√").css("color","green");
+            flag2=true;
+        }
+    })
+
+    $("#inputPwd").blur(function () {
+        let pwd =$("#inputPwd").val();
+        let pwdReg=/^[a-zA-Z]\w{5,17}$/
+        if(!pwdReg.test(pwd)){
+            $("#pwdError").text("密码格式错误！！！").css("color","red");
+        }else {
+            $("#pwdError").text("√").css("color","green");
+            flag3=true;
+        }
+    })
+
+    $("#registerBtn").click(function () {
+        $("#inputID").trigger("blur");
+        $("#inputTel").trigger("blur");
+        $("#inputPwd").trigger("blur");
+        if(flag1&&flag2&&flag3){
+            $("#ff").submit();
+        }else {
+            alert("不能注册");
+        }
+    })
+    $(function () {
+        $("#registerBtn").click(function () {
+            alert("hhh");
+            $.ajax({
+                url:"../../rider/register",
+                type:"post",
+                data:{
+                    "riderid":$("#inputID").val(),
+                    "ridername":$("#inputRname").val(),
+                    "ridertelephone":$("#inputTel").val(),
+                    "password":$("#inputPwd").val()
+                },
+                dataType:"json",
+                success(res){
+                    if(res.code=="001"){
+                        alert(res.msg);
+                        location.href="login.html";
+                    }else if(res.code == "002"){
+                        alert(res.msg);
+                    }
+                },error(msg) {
+                    alert("请求失败");
+                }
+            })
+        })
+    })
+
+
+</script>
+</html>

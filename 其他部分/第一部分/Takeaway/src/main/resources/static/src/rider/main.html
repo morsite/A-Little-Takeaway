@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          charset="utf-8"/>
+    <title>骑手登录页面</title>
+    <script src="../../js/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+    <!--    引入vue.js文件-->
+    <script src="../../js/vue.js"></script>
+    <!--    引入Axios.js文件-->
+    <script src="../../js/axios-0.18.0.js"></script>
+</head>
+<style>
+    #d1{
+        overflow: auto;
+        width: 70%;
+        height: 600px;
+        float: left;
+        background-color: lightblue;
+
+    }
+    #d2{
+        overflow: auto;
+        width: 30%;
+        height: 300px;
+        float: left;
+        background-color: lightcyan;
+
+    }
+    .btn1{
+        width: 30%;
+        height: 100px;
+        background-color: #3a8ee6;
+    }
+</style>
+<body>
+<div class="container">
+<div class="col-md-10" id="d1">
+    <h1><i><b>可接单页面</b></i></h1>&nbsp;&nbsp;<button @click="selectAll()">刷新订单状态</button><br>
+    <table class="table table-striped">
+        <tr>
+<!--            <th><input type="checkbox" id="chose" v-model="a"></th>-->
+            <th></th>
+            <th>订单id</th>
+            <th>客户电话</th>
+            <th>商家电话</th>
+            <th>客户地址</th>
+            <th>商家地址</th>
+            <th>订单状态</th>
+        </tr>
+        <tr v-for="order in orderList">
+            <td><input type="checkbox" name="ids" :value="order.id"></td>
+            <td>{{order.id}}</td>
+            <td>{{order.buyerTelephone}}</td>
+            <td>{{order.sellerTelephone}}</td>
+            <td>{{order.buyerAddress}}</td>
+            <td>{{order.sellerAddress}}</td>
+            <td>{{stateToString(order.state)}}</td>
+        </tr>
+    </table>
+</div>
+<div id="d2">
+    <h1><i><b>标注佣金</b></i></h1>
+    <table class="table table-striped">
+        <tr>
+            <!--            <th><input type="checkbox" id="chose" v-model="a"></th>-->
+<!--            <th></th>-->
+            <th>订单id</th>
+            <th>订单佣金</th>
+        </tr>
+        <tr v-for="OAM in OrdAndMealList">
+<!--            <td><input type="checkbox" name="ids" :value="order.id"></td>-->
+            <td>{{OAM.ordid}}</td>
+            <td>{{OAM.money}}</td>
+        </tr>
+    </table>
+
+
+</div>
+<div id="d3">
+    <button class="btn1" data-toggle="modal" data-target="#jiedanModal" id="confirmdd" @click="selectOrdById()">确认接单</button><p>
+    <button class="btn1" data-toggle="modal" data-target="#sondaModal" @click="selectOrdByState()">确认送达</button>
+    <button class="btn1" @click="selectSum()">查看今日佣金总额</button>
+</p>
+</div>
+    <!--接单模态框-->
+    <div class="modal fade" id="jiedanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:800px" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">接单信息</h4>
+                </div>
+                <div class="modal-body" style="height: 500px;">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>订单id</th>
+                            <th>客户电话</th>
+                            <th>商家电话</th>
+                            <th>客户地址</th>
+                            <th>商家地址</th>
+
+                        </tr>
+                        <tbody id="content">
+                        <tr v-for="order in orderList2">
+                            <td>{{order.id}}</td>
+                            <td>{{order.buyerTelephone}}</td>
+                            <td>{{order.sellerTelephone}}</td>
+                            <td>{{order.buyerAddress}}</td>
+                            <td>{{order.sellerAddress}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--接单模态框结束-->
+    <!--送达模态框-->
+    <div class="modal fade" id="sondaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:800px" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">配送中的订单</h4>
+                </div>
+                <div class="modal-body" style="height: 500px;">
+                    <table class="table table-striped">
+                        <tr>
+                            <th></th>
+                            <th>订单id</th>
+                            <th>客户电话</th>
+                            <th>商家电话</th>
+                            <th>客户地址</th>
+                            <th>商家地址</th>
+                        </tr>
+                        <tbody id="content2">
+                        <tr v-for="order in orderList3">
+                            <td><input type="checkbox" name="ids2" :value="order.id"></td>
+                            <td>{{order.id}}</td>
+                            <td>{{order.buyerTelephone}}</td>
+                            <td>{{order.sellerTelephone}}</td>
+                            <td>{{order.buyerAddress}}</td>
+                            <td>{{order.sellerAddress}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="" @click="updateStateTo4()">已送达</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    送达模态框结束-->
+</div>
+</body>
+<script>
+
+    let vm = new Vue({
+        el:".container",
+        data:{
+            orderList:[],
+            orderList2:[],
+            OrdAndMealList:[],
+            orderList3:[],
+            a: true
+        },
+        created(){
+            this.selectAll();
+            this.selectOAM();
+        },
+        methods:{
+            selectAll(){
+                let that=this;
+                axios.get("../../order/selectAllOrd").then(function (response) {
+                    console.log("selectAllOrd：response",response);
+                    that.orderList =response.data.data;
+                    // vm.orderList3 =response.data.data;
+                    console.log("this",this);
+                }).catch(function (error) {
+                    console.log("error",error);
+                })
+            },
+            //查询状态为3的数据 并回显
+            selectOrdByState(){
+                let that=this;
+                axios.get("../../order/selectOrdByState").then(function (response) {
+                    that.orderList3 =response.data.data;
+                    console.log("selectOrdByState:"+that.orderList3);
+                }).catch(function (error) {
+                    console.log("error",error);
+                })
+            },
+
+            selectOAM(){
+                let that=this;
+                axios.get("../../order/selectOAM").then(function (response) {
+                    that.OrdAndMealList=response.data.data;
+                    console.log("OrdAndMealList的数据：",that.OrdAndMealList);
+                }).catch(function(error){
+                    console.log("error",error);
+                })
+            },
+
+            selectSum(){
+                let that=this;
+                axios.get("../../order/selectSum").then(function (response) {
+                    alert("今日已获得佣金："+response.data.data+"元");
+                }).catch(function (error) {
+                    console.log("error",error);
+                })
+            },
+            stateToString(num){
+                if(num==2){
+                    return "可接单";
+                }else if(num == 3){
+                    return "已接单，配送中，不可接单";
+                }else if(num==4){
+                    return "已送达，不可接单";
+                }else if(num==0){
+                    return "在购物车中，不可接单";
+                }else if(num==1){
+                    return "刚付款未出餐，不可接单";
+                }
+            },
+            updateStateTo4(){
+                //获取复选框选择的id
+                // $("#content2").html("");
+                let that = this;
+                let arr=[];
+                $.each($("input[name=ids2]:checked"),function (index,tmp) {
+                    console.log("updateStateTo4 tmp:"+$(tmp).val());
+                    arr.push($(tmp).val());
+                })
+                console.log("updateStateTo4"+arr);
+                for(let id in arr) {
+                    console.log("updateStateTo4 id:"+id);
+                    if (confirm("确定餐已经送达了吗")) {
+                        console.log("arr[0]:"+arr[0]);
+                        axios.get("../../order/updateStateTo4/" +arr[id]).then(function (response) {
+                            console.log("updateStateTo4:" + response.data);
+                            alert(arr[id]+"号："+response.data.msg);
+                            that.selectAll();
+                        //    模态框隐藏
+                            $("#sondaModal").modal("hide");
+                        }).catch(function (error) {
+                            console.log("error", error);
+                        })
+                    }
+                }
+            },
+            selectOrdById(){
+                //清空模态框
+                $("#content").html("");
+                //    1 获取选中的复选框的用户编号 存储在数组中
+                var that = this;
+                let arr=[];
+                $.each($("input[name=ids]:checked"),function (index,tmp) {
+                    console.log("selectOrdById tmp:"+$(tmp).val());
+                    arr.push($(tmp).val());
+                })
+                console.log("selectOrdById arr:"+arr);
+                for(let id in arr){
+                    console.log("selectOrdById id:"+id);
+                    axios.get("../../order/selectOrdById/" +arr[id]).then(function (response) {
+                        alert(response.data.msg);
+                        console.log("相应的数据",response.data);
+                        vm.orderList2.push(response.data.data[0]);
+                        console.log(vm.orderList2);
+                        vm.selectAll();
+                    }).catch(function (error) {
+                        console.log("error",error);
+                        vm.selectAll();
+                    })
+                }
+            }
+        }
+    })
+
+//    全选与反选
+//     $("#chose").click(function () {
+//         $("input[name=ids]").prop("checked",$("#chose").prop("checked"));
+//         $.each($("input[name=ids]:checked"),function (index,tmp) {
+//             console.log($(tmp).val());
+//             arr.push($(tmp).val());
+//         })
+//     })
+
+//    用户信息回显
+
+//确认接单信息回显
+</script>
+</html>
