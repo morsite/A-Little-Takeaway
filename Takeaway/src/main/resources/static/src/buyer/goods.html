@@ -201,7 +201,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible2 = false">取 消</el-button>
-                    <el-button type="primary" @click="submitForm()">确 定</el-button>
+                    <el-button type="primary" @click="submitForm()">{{KAIGUAN ? "加入购物车" : "确 定"}}</el-button>
                  </span>
         </el-dialog>
     </div>
@@ -255,7 +255,7 @@
                     tel: '',
                     address: '',
                     price: ''
-                }
+                }, KAIGUAN: false
             }
         },
         created() {
@@ -297,8 +297,6 @@
                         });
                     }
                 });
-            }, cart() {
-
             }, GetRequest() {
                 const url = location.search;
                 let theRequest = new Object();
@@ -316,14 +314,32 @@
                 that.ruleForm.id = Math.floor(Math.random() * 100) + 637834 + Math.floor(Math.random() * 200)
                 that.ruleForm.name = this.name
             }, submitForm() {
-                this.dialogVisible2 = false
-                this.dialogVisible = true
-                this.msg.name = this.name
-                this.msg.num = this.ruleForm.num
-                this.msg.tel = this.ruleForm.tel
-                this.msg.desc = this.ruleForm.desc
-                this.msg.address = this.ruleForm.address
-                this.msg.price = parseFloat(this.price) * parseFloat(this.ruleForm.num)
+                if (this.KAIGUAN) {
+                    var a = new Object();
+                    a.oid = this.ruleForm.id
+                    a.id = this.GetRequest()["id"]
+                    a.name = this.ruleForm.name
+                    a.num = this.ruleForm.num
+                    a.tel = this.ruleForm.tel
+                    a.address = this.ruleForm.address
+                    a.desc = this.ruleForm.desc
+                    a.price = this.ruleForm.price
+                    a.bid = this.sellerid
+                    if (window.sessionStorage.getItem("gwc") == null) {
+                        window.sessionStorage.setItem("gwc", "");
+                    }
+                    window.sessionStorage.setItem("gwc", window.sessionStorage.getItem("gwc") + "," + JSON.stringify(a));
+                    window.location.href = "http://localhost:8080/src/buyer/index.html"
+                } else {
+                    this.dialogVisible2 = false
+                    this.dialogVisible = true
+                    this.msg.name = this.name
+                    this.msg.num = this.ruleForm.num
+                    this.msg.tel = this.ruleForm.tel
+                    this.msg.desc = this.ruleForm.desc
+                    this.msg.address = this.ruleForm.address
+                    this.msg.price = parseFloat(this.price) * parseFloat(this.ruleForm.num)
+                }
             }, modelpay() {
                 var that = this;
                 axios.get("../../order/neworder", {
@@ -349,11 +365,11 @@
                     console.log(err);
                 })
             }, addGwc() {
-                if (window.sessionStorage.getItem("gwc") == null) {
-                    window.sessionStorage.setItem("gwc", "");
-                }
-                window.sessionStorage.setItem("gwc", window.sessionStorage.getItem("gwc") + "," + this.GetRequest()["id"])
-                window.location.href = "http://localhost:8080/src/buyer/index.html"
+                this.KAIGUAN = true
+                this.dialogVisible2 = true
+                var that = this;
+                that.ruleForm.id = Math.floor(Math.random() * 100) + 637834 + Math.floor(Math.random() * 200)
+                that.ruleForm.name = this.name
             }
         }
     })

@@ -70,20 +70,24 @@
     .clearfix:after {
         clear: both
     }
-    .gwc{
+
+    .gwc {
         position: fixed;
         top: 100px;
         right: 0;
     }
-    .gw{
+
+    .gw {
         position: fixed;
         top: 140px;
         right: 0;
         width: 200px;
         height: 320px;
-        background-color: #5daf34;
+        background-color: #dde4e5;
+        border-radius: 15px;
     }
-    .gw .a1{
+
+    .gw .a1 {
         width: 100%;
         height: 260px;
         overflow: auto;
@@ -254,7 +258,7 @@
         </el-col>
     </el-row>
     <el-button class="gwc" type="primary" @click="gwcShow()">
-        {{showG?"关  闭":"购物车"}}
+        {{showG ? "关  闭" : "购物车"}}
     </el-button>
     <div class="gw" v-show="showG">
         <div class="a1">
@@ -285,20 +289,22 @@
                 }],
                 now: 1,
                 showG: false,
-                gwcList:[],
-                sum:0
+                gwcList: [],
+                sum: 0
             }
         }, created() {
             this.refresh(1)
             var item = window.sessionStorage.getItem("gwc");
-            var strings = item.split(",");
+            console.log(item)
+            var strings = item.split(",{");
             var that = this
-            if(!(strings.length<=1)) {
+            if (!(strings.length <= 1)) {
                 for (var i = 1; i < strings.length; i++) {
-                    axios.get("../../meal/onemeal?id="+strings[i]).then(res=>{
+                    var parse = JSON.parse("{" + strings[i]);
+                    axios.get("../../meal/onemeal?id=" + parse.id).then(res => {
                         console.log(res.data.all)
-                        that.gwcList.push(res.data.all.message +",价格："+ res.data.all.price)
-                        this.sum+=parseFloat(res.data.all.price)
+                        that.gwcList.push(res.data.all.message + ",价格：" + res.data.all.price)
+                        this.sum += parseFloat(res.data.all.price)
                     })
                 }
             }
@@ -338,10 +344,10 @@
                 this.now = index;
             }, open(id) {
                 window.location.href = "./goods.html?id=" + id;
-            },getByName(){
+            }, getByName() {
                 console.log("aa")
                 var that = this;
-                axios.get("../../meal/namemeal?kind=" + this.now+"&name="+this.input).then(function (res) {
+                axios.get("../../meal/namemeal?kind=" + this.now + "&name=" + this.input).then(function (res) {
                     if (res.data.code == 200) {
                         console.log(res.data.all)
                         that.mList = res.data.all
@@ -354,13 +360,46 @@
                 }).catch(function (err) {
                     console.log(err);
                 })
-            },gwcShow(){
+            }, gwcShow() {
                 this.showG = !this.showG;
-            },cleargwc(){
-                window.sessionStorage.setItem("gwc","")
+            }, cleargwc() {
+                window.sessionStorage.setItem("gwc", "")
                 this.gwcList = []
                 this.sum = 0
-            },settlement(){
+            }, settlement() {
+                var that = this;
+                var item = window.sessionStorage.getItem("gwc");
+                console.log(item)
+                var strings = item.split(",{");
+                var that = this
+                if (!(strings.length <= 1)) {
+                    for (var i = 1; i < strings.length; i++) {
+                        var parse = JSON.parse("{" + strings[i]);
+                        console.log(parse)
+                        axios.get("../../order/neworder", {
+                            params: {
+                                "num": parse.num,
+                                "tel": parse.tel,
+                                "address": parse.address,
+                                "desc": parse.desc,
+                                "id": parse.oid,
+                                "name": parse.name,
+                                "bid": parse.bid
+                            }
+                        }).then(function (res) {
+                            if (res.data.code == 200) {
+                                window.location.href = ""
+                            } else {
+                                that.$message({
+                                    message: '读取失败',
+                                    type: 'warning'
+                                });
+                            }
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    }
+                }
                 this.cleargwc();
                 this.$message({
                     message: '结算成功',
